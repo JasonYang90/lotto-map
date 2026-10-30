@@ -89,6 +89,9 @@ button, input, select { font: inherit; color: inherit; }
 
 /* 지도 위 표시 */
 .me { width: 18px; height: 18px; border-radius: 50%; background: #1f6bff; border: 3px solid #fff; box-shadow: 0 0 0 6px rgba(31, 107, 255, 0.22); }
+.cl { border-radius: 50%; background: rgba(31, 79, 184, 0.86); color: #fff; text-align: center; font: 700 13px var(--font-body); border: 2px solid rgba(255, 255, 255, 0.9); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25); box-sizing: border-box; }
+/* 오픈스트리트맵 출처 표기가 아래 목록에 가리지 않게 */
+.leaflet-bottom { bottom: var(--sheet-h, 150px); }
 .pick { padding: 5px 10px; background: var(--ink); color: var(--panel); border-radius: 8px; font: 600 13px var(--font-body); white-space: nowrap; transform: translateY(-34px); box-shadow: var(--shadow); }
 
 @media (min-width: 900px) {
@@ -97,6 +100,7 @@ button, input, select { font: inherit; color: inherit; }
   .grab { display: none; }
   .sheethead { padding-top: 12px; }
   .fab { bottom: 24px !important; }
+  .leaflet-bottom { bottom: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .sheet, .fab { transition: none; } }
 </style>

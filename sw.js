@@ -1,6 +1,6 @@
-// 앱 화면과 판매점 자료를 저장해 두고, 먼저 저장본을 보여준 뒤 뒤에서 새로 받아 갱신함
-// 파일을 바꿔 배포할 때는 CACHE 이름의 숫자를 올리면 예전 저장본이 지워짐
-const CACHE = "lotto-map-v2";
+// 앱 화면과 판매점 자료를 저장해 둠. 인터넷이 되면 항상 새 파일을 먼저 받고,
+// 끊겼을 때만 저장본을 보여줌. 그래서 GitHub에서 파일을 고치면 다음에 열 때 바로 반영됨.
+const CACHE = "lotto-map-v3";
 const SHELL = ["./", "index.html", "app.js", "config.js", "manifest.webmanifest", "stores.json", "icon-192.png", "icon-512.png"];
 
 self.addEventListener("install", e => {
@@ -15,14 +15,12 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
-  // 카카오 지도 SDK·지도 그림 같은 외부 요청은 그대로 통과
+  // 카카오·오픈스트리트맵 같은 외부 요청은 그대로 통과
   if (e.request.method !== "GET" || url.origin !== location.origin) return;
-  e.respondWith(caches.open(CACHE).then(async cache => {
-    const cached = await cache.match(e.request, { ignoreSearch: true });
-    const fresh = fetch(e.request).then(res => {
-      if (res.ok) cache.put(e.request, res.clone());
+  e.respondWith(
+    fetch(e.request, { cache: "no-cache" }).then(res => {
+      if (res.ok) { const copy = res.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); }
       return res;
-    }).catch(() => cached);
-    return cached || fresh;
-  }));
+    }).catch(() => caches.match(e.request, { ignoreSearch: true }))
+  );
 });
